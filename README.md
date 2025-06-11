@@ -88,3 +88,41 @@ kubectl apply -f name_of_file.yaml
 ```
 
 If we create a pod imperitively (through the command line), we can view the actual yaml file created by the command by running the command `kubectl get pod pod_name -o yaml`.
+
+## Deployments
+For large scale operations where you need many instances, instead of initialising pods one by one, you would use a deployment. A deployment is a powerful kubernetes controller that lets you manage your application across multiple instances effortlessly.Acts like a project manager. It ensures the right number of pods are always running as specified. You can scale up or down depending on how many pods you need. You can easily pgrade or roll back deployments. The deployment definition file will look like the below;
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: nginx-deployment
+    labels:
+        app: nginx
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: nginx
+    template:
+        metadata:
+            labels:
+                app: nginx
+        spec:
+            containers:
+            - name: nginx
+              image: nginx
+            ports:
+            - containerPort: 80
+```
+
+To run the definition file, we run the command
+
+```
+kubectl apply -f name_of_file.yaml
+```
+
+To create a deployment imperitively, you run the command:
+
+`kubectl create deployment name_of_deployment --image=image_name --replicas=2`
+
