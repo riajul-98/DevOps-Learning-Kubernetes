@@ -17,3 +17,49 @@ Repository containing commands and topics I learnt in the CoderCo Kubernetes Mod
     - Kubelet: An agent that talks to the master node, making sure containers are running as they should be. If a pod needs to be spun up, the kubelet handles that.
     - Kube-proxy: Handles the networking side of things. Ensures that each pod in the node can communicate with other pods in the cluster no matter where they are running. 
     - Pod: The smallest unit in kubernetes. They are like wrappers for containers. A pod can contain one or more containers.
+
+## Kubernetes in Docker (kind)
+- To create a cluster, create a yaml file which contains the below
+```
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes: 
+- role: control-plane
+- role: worker
+- role: worker
+
+```
+
+- To deploy the cluster, run the following command 
+```
+kind create cluster --config name-of-file.yaml --name cluster-name
+```
+
+- To view the cluster run the command
+```
+kubectl cluster-info --context kind-name-of-cluster
+```
+
+- You can check the nodes by running `kubectl get nodes`
+
+- Once you have the nodes set up, you can run pods on these nodes by running the command:
+```
+kubectl run pod name_of_node --image=container_image
+```
+
+- You can check the pods by running `kubectl get pods`
+
+- To create a deployment, run the command:
+
+```
+kubectl run deployment name_of_node --image=container_image
+```
+
+- You can check the deployments by running `kubectl get deployments`
+
+- To delete the cluster, you run the command:
+
+```
+kind delete cluster --name name_of_cluster
+```
+
