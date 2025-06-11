@@ -126,3 +126,5 @@ To create a deployment imperitively, you run the command:
 
 `kubectl create deployment name_of_deployment --image=image_name --replicas=2`
 
+## ReplicaSets
+The simplest pod controller is the replicaSet. Ensures ensures a speciffied number of pod instances are running at any given time. If one pod fails, the replicaSet spins up a new one to replace it. Deployments are better as it creates a pod manager behind the scenes as well as comes with features such as automated roll backs and rolling updates. The deployment handles all the hardwork for you. 
