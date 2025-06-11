@@ -63,3 +63,28 @@ kubectl run deployment name_of_node --image=container_image
 kind delete cluster --name name_of_cluster
 ```
 
+## Pods
+
+A pod is the smallest unit of work or resource found in kubernetes. Each pod contains one or more containers. Containers in a pod are always scheduled together (run on the same machine). All containers in a pod have the same IP address and port space, meaning they can communicate using a local host. All the containers in a pod have access to a shared local storage on the node that is hosted in the pod. Containers do not get access by default to local storage, volumes must be explicitly mounted to each container on the pod. Pods can be defined in a definition file as can be seen below;
+
+```
+apiVersion: v1
+Kind: Pod
+Metadata:
+    labels:
+        run: nginx
+    name: nginx
+Spec:
+    containers:
+    - image: nginx
+      name: nginx
+
+```
+
+To run the definition file, we run the command
+
+```
+kubectl apply -f name_of_file.yaml
+```
+
+If we create a pod imperitively (through the command line), we can view the actual yaml file created by the command by running the command `kubectl get pod pod_name -o yaml`.
