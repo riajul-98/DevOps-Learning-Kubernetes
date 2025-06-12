@@ -128,3 +128,17 @@ To create a deployment imperitively, you run the command:
 
 ## ReplicaSets
 The simplest pod controller is the replicaSet. Ensures ensures a speciffied number of pod instances are running at any given time. If one pod fails, the replicaSet spins up a new one to replace it. Deployments are better as it creates a pod manager behind the scenes as well as comes with features such as automated roll backs and rolling updates. The deployment handles all the hardwork for you. 
+
+## Services
+Services allow other users to access deployed pods. They make sure everything that need to talk can do so whether that is external pods or other resources. An application has different groups of pods running, a group for databases, a group for frontend and one group for backend. They need to communicate with each other for the application to work smoothly. Services will allow these groups to connect seemlessly. They allow for applications to be built in a loosely coupled way. You are able to update or scale a part of the application without affecting the other parts. Services use labels to identify the pods they should be connecting. The three main types of services are Cluster IP, Node Port and Load Balancers. 
+
+Services operate on the network layer (level 3) of the OSI model meaning they work with TCP and UDP protocols. Behind the scenes, kube-proxies are in charge, it creates IP tables and routes within this.
+
+### Cluster IP
+Cluster IP is the default, it gives a stable internal IP address your pods can use to talk to each other within the cluster. Service only reachable within the cluster. 
+
+### Node Port
+Node ports exposes your service on a specific port on each node in your cluster. It is a simple way to make sure a service is accessible from outside the cluster. You have a target port, e.g. port 80, this is the port on the pod your application is listening on. Then you have a service port which is an internal port that the service listens on e.g. port 8080. Kubernetes forwards requests received on this port to the target port on the pods. Then we have a node port, e.g. 30080, this is the port that gets opened in each node (usually a high numbered port). The Node port maps to the service internally. If you want to access the application, you would use http://ip-address:30080.
+
+### Load Balancers
+Load Balancers is typically used in cloud environments so without a cluster in the cloud, it wouldn't work. It automatically creates an external load balancer that distributes traffic to your pods. If you create a load balancer, this will create an actual load balancer in your cloud environment. The load balancer will distribute incoming traffic across your pods. 
