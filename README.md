@@ -142,3 +142,47 @@ Node ports exposes your service on a specific port on each node in your cluster.
 
 ### Load Balancers
 Load Balancers is typically used in cloud environments so without a cluster in the cloud, it wouldn't work. It automatically creates an external load balancer that distributes traffic to your pods. If you create a load balancer, this will create an actual load balancer in your cloud environment. The load balancer will distribute incoming traffic across your pods. 
+
+## Storage
+Pods are ethemeral (they can be brought up and deleted frequently). If you are not using persistent storage, all your data will be wiped. This is where persistent storage comes in. It ensures data reliability beyond pod lifecycle. Critical for stateful applications. 
+
+### Persistent Volumes (PV)
+A piece of storage that has been set aside specifically for your application in Kubernetes. It abstracts away the underlying storage details (does not need to worry if the storage is coming from local disk, or cloud storage). Created by Kubernetes admins. Once created they are available for use by the pods which can claim them through a persistent volume claim (PVC).
+
+### Persistent Volume Claim (PVC)
+Request for your application to your cluster for storage. Binds to a PV. Specify the amount of storage you need and any other requirements like access logs. The cluster will then look for a persistent volume that matches your request and binds it to the PVC. 
+
+### ConfigMaps
+Provides configuration settings to pods such as environment variables, URLs or file paths. Good for settings which may change based on environment thus hardcoding isn't ideal. Like a storage box for non-confidential data which your pods can access. 
+
+To create a config map, you can run the command below:
+```
+kubectl create configmap name_of_cm --from-literal=ENV_VAR1=value --from-literal=ENV_VAR2=value....
+```
+
+To view configMaps, use the command `kubectl get cm`
+
+### Secrets
+Secrets store sensitive data securely within your cluster such as passwords, API keys etc. Secrets are not encrypted by default but are stored base64 encoded. Kubernetes ensures secrets are only accessible to pods and services that need them. Secrets, like configMaps can be mounted to pods as a volume.
+
+To create a secret from the command line, we can use the command:
+
+```
+kubectl create secret generic secret_name --from-listeral=username=myuser --from-literal=password=mypasssecret
+```
+
+There are two ways to use the secrets as can be seen below: 
+
+![alt text](image.png)
+
+## K8s Networking
+- All pods can communicate with all other pods without using network address translation (NAT). what this means is every pod has a unique IP address and they can talk to each other directly using those IPs. 
+- All nodes can communicate with all pods without NAT.
+- The IP that a pod sees itself as is the same IP that others see it as. 
+
+## Networking Policies
+Crucial for controlling the flow of traffic between pods in a cluster, ensuring your applications are secure and communication only happens where it is supposed to. Network policies are a set of rules that govern the communication between pods. Allows you to specify which pods can communicate with each other as well as which pods can connect or be connected from external resources. Without network policies, all pods within a cluster can communicate freely (not always desirable). You define rules using selectors that match labels or pods. There are two main types, ingress and egress. Policies can be used together or separately to control the flow of traffic to and from your pods. 
+
+## Ingress Controller
+- Ingress is a way to manage external access to your services. Similar to a router that directs traffic to the right service based on request URL or domain name. It allows you to configure rules that dictate how traffic should flow into your cluster. Configuring an ingress resource involves defining the rules in a file. 
+- An ingress controller enforces those rules and manages traffic. It intercepts the ingress rules and makes sure traffic is routed correctly to your services. Without an ingress controller, your ingress is just a set of instructions without anyone to follow them. Examples of ingress controllers are nginx and trafeek. 
